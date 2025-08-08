@@ -33,7 +33,7 @@ export default function Plot({
       hovertemplate: "τ=%{x:.2f}<br>%{y:.2%}<extra>%{fullData.name}</extra>"
     }));
 
-    const layout: Partial<Plotly.Layout> = {
+    const layout: any = {
       title: { text: title },
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
