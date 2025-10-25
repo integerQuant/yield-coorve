@@ -1,0 +1,489 @@
+/* Dark theme variables inspired by the original Tailwind slate/indigo palette */
+:root {
+  --bg-card: rgba(15, 23, 42, 0.4);      /* slate-950-ish w/ alpha */
+  --border-color: #1e293b;              /* slate-800 */
+  --text-primary: #ffffff;
+  --text-muted: #94a3b8;                /* slate-400 */
+  --text-subtle: #64748b;               /* slate-500 */
+  --text-soft: #cbd5e1;                 /* slate-300 */
+  --bg-page: #0f172a;                   /* slate-900 */
+  --input-bg: #0f172a;                  /* slate-900 */
+  --input-border: #334155;              /* slate-700 */
+  --accent-bg: #4f46e5;                 /* indigo-600 */
+  --accent-bg-hover: #6366f1;           /* indigo-500 */
+  --radius-lg: 1rem;
+  --radius-sm: 0.375rem;
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Breakpoints to mimic Tailwind sm / md / xl */
+@media (min-width: 640px) {
+  :root {
+    --space-outer: 24px;
+    --block-gap: 32px;
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --space-outer: 16px;
+    --block-gap: 24px;
+  }
+}
+
+/* Page container */
+.app-container {
+  min-height: 100vh;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+
+  /* max-width 3xl ~ 48rem, then 4xl ~ 56rem @ md */
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+
+  padding-left: var(--space-outer);
+  padding-right: var(--space-outer);
+  padding-top: var(--space-outer);
+  padding-bottom: var(--space-outer);
+
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--block-gap);
+}
+
+@media (min-width: 768px) {
+  .app-container {
+    max-width: 56rem;
+  }
+}
+
+/* Header */
+.app-header {
+  margin-bottom: 8px;
+}
+
+@media (min-width: 640px) {
+  .app-header {
+    margin-bottom: 12px;
+  }
+}
+
+.app-title {
+  font-size: 1.5rem;          /* ~text-2xl */
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .app-title {
+    font-size: 1.875rem;      /* ~text-3xl */
+  }
+}
+
+.app-subtitle {
+  font-size: 0.75rem;         /* text-xs */
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+@media (min-width: 640px) {
+  .app-subtitle {
+    font-size: 0.875rem;      /* text-sm */
+  }
+}
+
+.ext-link {
+  text-decoration: underline;
+  color: inherit;
+  transition: color 0.15s ease-in-out;
+}
+
+.ext-link:hover {
+  color: #818cf8;             /* indigo-400-ish */
+}
+
+/* Generic "card" section */
+.section-box {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+@media (min-width: 640px) {
+  .section-box {
+    padding: 24px;
+  }
+}
+
+.section-heading {
+  font-size: 1rem;            /* text-base */
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+@media (min-width: 640px) {
+  .section-heading {
+    font-size: 1.125rem;      /* text-lg */
+  }
+}
+
+/* Typography block, similar to tailwind-typography prose-invert */
+.section-content {
+  color: var(--text-primary);
+  max-width: none;
+  font-size: 0.875rem;        /* prose-sm baseline */
+  line-height: 1.6;
+}
+
+@media (min-width: 640px) {
+  .section-content {
+    font-size: 1rem;
+  }
+}
+
+.section-content p {
+  margin-top: 0;
+  margin-bottom: 1em;
+  color: var(--text-primary);
+}
+
+.section-content code {
+  background-color: rgba(148, 163, 184, 0.15);
+  color: var(--text-primary);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.section-content strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.section-content em {
+  font-style: italic;
+}
+
+.section-content ul {
+  padding-left: 1.25rem;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+
+.section-content li {
+  margin-bottom: 0.5em;
+  color: var(--text-primary);
+}
+
+/* Parameters row above the grid */
+.controls-row {
+  margin-bottom: 16px;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  column-gap: 8px;
+}
+
+@media (min-width: 640px) {
+  .controls-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 12px;
+    column-gap: 12px;
+  }
+}
+
+.controls-label {
+  font-size: 0.875rem;
+  color: var(--text-soft);
+}
+
+.controls-group {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.select-input {
+  background-color: var(--input-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--input-border);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  outline: 0;
+}
+
+.select-input:focus {
+  border-color: var(--accent-bg);
+  box-shadow: 0 0 0 2px var(--accent-bg);
+}
+
+.reset-button {
+  background-color: var(--accent-bg);
+  border-radius: var(--radius-sm);
+  border: none;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.reset-button:hover {
+  background-color: var(--accent-bg-hover);
+}
+
+.latest-span {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--text-subtle);
+}
+
+.tip-text {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+@media (min-width: 640px) {
+  .tip-text {
+    margin-left: auto;
+  }
+}
+
+/* Grid of NumberField inputs */
+.param-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .param-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-gap: 16px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .param-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Chart area */
+.chart-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 24px;
+  column-gap: 24px;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .chart-wrapper {
+    row-gap: 32px;
+    column-gap: 32px;
+  }
+}
+
+.chart-section {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  overflow: hidden;
+
+}
+
+.formula-text {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  word-break: break-word;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+:root {
+  /* deep blueprint paper */
+  --bg: #2558a0;
+
+  /* grid colors */
+  --grid-major: rgba(84, 144, 170, 0.5);
+  --grid-minor: rgba(140, 220, 255, 0.15);
+
+  /* spacing for the grid */
+  --grid-size: 16px;
+  --major-step: 4;
+  --major-thickness: 1px;
+}
+
+/* Reset body and also paint the blueprint background directly on body */
+body {
+  margin: 0;
+  color: #fff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--bg);
+
+  background-image:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,0) 60%,
+      rgba(0,0,0,0.35) 99%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent calc(calc(var(--grid-size) * var(--major-step)) - var(--major-thickness)),
+      var(--grid-major) calc(calc(var(--grid-size) * var(--major-step)) - var(--major-thickness)),
+      var(--grid-major) calc(calc(var(--grid-size) * var(--major-step)))
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent calc(calc(var(--grid-size) * var(--major-step)) - var(--major-thickness)),
+      var(--grid-major) calc(calc(var(--grid-size) * var(--major-step)) - var(--major-thickness)),
+      var(--grid-major) calc(calc(var(--grid-size) * var(--major-step)))
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent calc(var(--grid-size) - 1px),
+      var(--grid-minor) calc(var(--grid-size) - 1px),
+      var(--grid-minor) var(--grid-size)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent calc(var(--grid-size) - 1px),
+      var(--grid-minor) calc(var(--grid-size) - 1px),
+      var(--grid-minor) var(--grid-size)
+    );
+
+  background-repeat: no-repeat, repeat, repeat, repeat, repeat;
+  background-size:
+    100% 100%,
+    auto,
+    auto,
+    auto,
+    auto;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    0 0;
+
+  /* this is the key part that makes it feel fixed like a HUD without using a fixed div */
+  background-attachment:
+    fixed,
+    fixed,
+    fixed,
+    fixed,
+    fixed;
+}
+
+/* Your content wrapper stays normal */
+.app-container {
+  position: relative;
+  z-index: 1;
+
+  /* all your layout styles from before */
+  min-height: 100vh;
+
+  /* up to you: panel mode or transparent mode */
+  background-color: rgba(15, 23, 42, 0.85); /* dark slate panel */
+  box-shadow: 0 30px 120px rgba(0,0,0,0.8);
+  border-radius: 1rem;
+
+  max-width: 56rem;
+  margin-left: auto;
+  margin-right: auto;
+
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 32px;
+}
+
+@media (min-width: 480px) {
+  .app-container {
+    padding: 32px;
+    width: 80%;
+  }
+}
+
+
+.app-container {
+  position: relative;
+  z-index: 1;
+
+  /* critical fixes */
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 56rem;
+  overflow-x: hidden;
+
+  /* layout / visuals */
+  min-height: 100vh;
+  background-color: rgba(15, 23, 42, 0.85); /* dark slate panel */
+  box-shadow: 0 30px 120px rgba(0,0,0,0.8);
+  border-radius: 1rem;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 32px;
+}
+
+@media (min-width: 480px) {
+  .app-container {
+    /* still border-box so padding stays inside this width */
+    width: 80%;
+    padding: 32px;
+  }
+}
+
+.chart-section {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  overflow: hidden;
+}
+
+.chart-section {
+  box-sizing: border-box;
+  width: 100%;
+  overflow-x: hidden;
+  overflow: hidden;
+
+}
+
+@media (max-width: 639px) {
+    .app-container {
+        padding: 20px 10px;
+        margin: 2rem 0;
+    }
+}
