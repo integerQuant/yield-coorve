@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "deploy": "vite build && gh-pages -d dist"
+    "deploy": "vite build && gh-pages -d dist",
+    "lint:css": "stylelint \"**/*.css\"",
+    "lint:css:fix": "stylelint \"**/*.css\" --fix"
   },
   "dependencies": {
     "plotly.js-dist-min": "2.35.2",
@@ -21,8 +23,15 @@
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "10.4.20",
     "postcss": "8.4.41",
+    "stylelint": "^16.25.0",
+    "stylelint-config-standard": "^39.0.1",
     "tailwindcss": "3.4.10",
     "typescript": "5.5.4",
     "vite": "5.4.2"
-  }
+  },
+  "main": "postcss.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 
 type Props = {
   label: string;
@@ -17,29 +17,44 @@ export default function NumberField({
   max = 1,
   onChange
 }: Props) {
+  const rangeRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (rangeRef.current) {
+      // Required for Firefox to honor vertical orientation
+      rangeRef.current.setAttribute("orient", "vertical");
+      // Improve a11y for assistive tech
+      rangeRef.current.setAttribute("aria-orientation", "vertical");
+    }
+  }, []);
+
+  const safe = Number.isFinite(value) ? value : 0;
+
   return (
-    <label className="block text-sm">
-      <div className="mb-1 text-slate-300">{label}</div>
-      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-        <input
-          className="w-full sm:w-40 rounded bg-slate-900 px-3 py-2 outline-none ring-1 ring-slate-700 focus:ring-indigo-500"
-          type="number"
-          step={step}
-          min={min}
-          max={max}
-          value={Number.isFinite(value) ? value : 0}
-          onChange={(e) => onChange(parseFloat(e.target.value))}
-        />
-        <input
-          className="w-full sm:flex-1 accent-indigo-500 h-3"
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={Number.isFinite(value) ? value : 0}
-          onChange={(e) => onChange(parseFloat(e.target.value))}
-        />
-      </div>
+    <label className="numberField">
+      <span className="numberField__label">{label}</span>
+
+      <input
+        className="number-field__number"
+        type="number"
+        step={step}
+        min={min}
+        max={max}
+        value={safe}
+        onChange={(e) => onChange(e.target.value === "" ? 0 : Number(e.target.value))}
+        inputMode="decimal"
+      />
+
+      <input
+        ref={rangeRef}
+        className="number-field__range-vertical"
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={safe}
+        onChange={(e) => onChange(Number(e.target.value))}
+      />
     </label>
   );
 }

@@ -1,489 +1,1186 @@
-/* Dark theme variables inspired by the original Tailwind slate/indigo palette */
 :root {
-  --bg-card: rgba(15, 23, 42, 0.4);      /* slate-950-ish w/ alpha */
-  --border-color: #1e293b;              /* slate-800 */
-  --text-primary: #ffffff;
-  --text-muted: #94a3b8;                /* slate-400 */
-  --text-subtle: #64748b;               /* slate-500 */
-  --text-soft: #cbd5e1;                 /* slate-300 */
-  --bg-page: #0f172a;                   /* slate-900 */
-  --input-bg: #0f172a;                  /* slate-900 */
-  --input-border: #334155;              /* slate-700 */
-  --accent-bg: #4f46e5;                 /* indigo-600 */
-  --accent-bg-hover: #6366f1;           /* indigo-500 */
-  --radius-lg: 1rem;
-  --radius-sm: 0.375rem;
-  --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
-}
+    --bg-card: rgb(15 23 42 / 40%);
 
-/* Breakpoints to mimic Tailwind sm / md / xl */
-@media (min-width: 640px) {
-  :root {
-    --space-outer: 24px;
-    --block-gap: 32px;
-  }
-}
+    /* slate-950-ish w/ alpha */
+    --border-color: #1e293b;
 
-@media (max-width: 639px) {
-  :root {
+    /* slate-800 */
+    --text-primary: #fff;
+    --text-muted: #94a3b8;
+
+    /* slate-400 */
+    --text-subtle: #64748b;
+
+    /* slate-500 */
+    --text-soft: #cbd5e1;
+
+    /* slate-300 */
+    --bg-page: #0f172a;
+
+    /* slate-900 */
+    --input-bg: #0f172a;
+
+    /* slate-900 */
+    --input-border: #334155;
+
+    /* slate-700 */
+    --accent-bg: rgb(39, 128, 211);
+    --accent-bg-hover: rgb(79, 158, 231);
+    --radius-lg: 1rem;
+    --radius-md: 0.5rem;
+    --radius-sm: 0.375rem;
+    --font-family: system-ui, -apple-system, blinkmacsystemfont, "Inter",
+        roboto, "Helvetica Neue", arial, sans-serif;
+
+    /* layout spacing defaults (mobile first) */
     --space-outer: 16px;
-    --block-gap: 24px;
-  }
+    --block-gap: .5rem;
+
+    /* subtle pulse */
+    --pulse-color: rgb(148 163 184 / 18%);
+
+    /* deep blueprint paper */
+    --bg-blueprint: #2558a0;
+
+    /* grid colors */
+    --grid-major: rgb(84 144 170 / 50%);
+    --grid-minor: rgb(140 220 255 / 15%);
+
+    /* grid spacing */
+    --grid-size: 16px;
+    --major-step: 4;
+    --major-thickness: 1px;
+    --slider-length: 160px;
+
+    /* travel length */
+    --slider-thickness: 1.5rem;
+
+    /* visual thickness */
+    --thumb-size: 1.25rem;
+    --track-bg: #2a2f45;
+    --thumb-bg: var(--accent-bg);
 }
 
-/* Page container */
-.app-container {
-  min-height: 100vh;
-  background-color: var(--bg-page);
-  color: var(--text-primary);
-  font-family: var(--font-family);
 
-  /* max-width 3xl ~ 48rem, then 4xl ~ 56rem @ md */
-  max-width: 48rem;
-  margin-left: auto;
-  margin-right: auto;
-
-  padding-left: var(--space-outer);
-  padding-right: var(--space-outer);
-  padding-top: var(--space-outer);
-  padding-bottom: var(--space-outer);
-
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--block-gap);
+/* responsive tokens */
+@media (width >=640px) {
+    :root {
+        --space-outer: 24px;
+        --block-gap: .5rem;
+    }
 }
 
-@media (min-width: 768px) {
-  .app-container {
-    max-width: 56rem;
-  }
-}
-
-/* Header */
-.app-header {
-  margin-bottom: 8px;
-}
-
-@media (min-width: 640px) {
-  .app-header {
-    margin-bottom: 12px;
-  }
-}
-
-.app-title {
-  font-size: 1.5rem;          /* ~text-2xl */
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.03em;
-  margin: 0;
-}
-
-@media (min-width: 640px) {
-  .app-title {
-    font-size: 1.875rem;      /* ~text-3xl */
-  }
-}
-
-.app-subtitle {
-  font-size: 0.75rem;         /* text-xs */
-  color: var(--text-muted);
-  margin-top: 4px;
-  line-height: 1.4;
-}
-
-@media (min-width: 640px) {
-  .app-subtitle {
-    font-size: 0.875rem;      /* text-sm */
-  }
-}
-
-.ext-link {
-  text-decoration: underline;
-  color: inherit;
-  transition: color 0.15s ease-in-out;
-}
-
-.ext-link:hover {
-  color: #818cf8;             /* indigo-400-ish */
-}
-
-/* Generic "card" section */
-.section-box {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-}
-
-@media (min-width: 640px) {
-  .section-box {
-    padding: 24px;
-  }
-}
-
-.section-heading {
-  font-size: 1rem;            /* text-base */
-  font-weight: 600;
-  margin: 0 0 12px 0;
-  line-height: 1.4;
-}
-
-@media (min-width: 640px) {
-  .section-heading {
-    font-size: 1.125rem;      /* text-lg */
-  }
-}
-
-/* Typography block, similar to tailwind-typography prose-invert */
-.section-content {
-  color: var(--text-primary);
-  max-width: none;
-  font-size: 0.875rem;        /* prose-sm baseline */
-  line-height: 1.6;
-}
-
-@media (min-width: 640px) {
-  .section-content {
-    font-size: 1rem;
-  }
-}
-
-.section-content p {
-  margin-top: 0;
-  margin-bottom: 1em;
-  color: var(--text-primary);
-}
-
-.section-content code {
-  background-color: rgba(148, 163, 184, 0.15);
-  color: var(--text-primary);
-  padding: 0.1em 0.4em;
-  border-radius: 4px;
-  font-size: 0.9em;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-
-.section-content strong {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
-.section-content em {
-  font-style: italic;
-}
-
-.section-content ul {
-  padding-left: 1.25rem;
-  margin-top: 0.5em;
-  margin-bottom: 1em;
-}
-
-.section-content li {
-  margin-bottom: 0.5em;
-  color: var(--text-primary);
-}
-
-/* Parameters row above the grid */
-.controls-row {
-  margin-bottom: 16px;
-
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-  column-gap: 8px;
-}
-
-@media (min-width: 640px) {
-  .controls-row {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    row-gap: 12px;
-    column-gap: 12px;
-  }
-}
-
-.controls-label {
-  font-size: 0.875rem;
-  color: var(--text-soft);
-}
-
-.controls-group {
-  display: flex;
-  align-items: center;
-  column-gap: 8px;
-}
-
-.select-input {
-  background-color: var(--input-bg);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--input-border);
-  color: var(--text-primary);
-  padding: 8px 12px;
-  font-size: 0.875rem;
-  line-height: 1.4;
-  outline: 0;
-}
-
-.select-input:focus {
-  border-color: var(--accent-bg);
-  box-shadow: 0 0 0 2px var(--accent-bg);
-}
-
-.reset-button {
-  background-color: var(--accent-bg);
-  border-radius: var(--radius-sm);
-  border: none;
-  color: #fff;
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.4;
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: background-color 0.15s ease-in-out;
-}
-
-.reset-button:hover {
-  background-color: var(--accent-bg-hover);
-}
-
-.latest-span {
-  font-size: 0.75rem;
-  line-height: 1.4;
-  color: var(--text-subtle);
-}
-
-.tip-text {
-  font-size: 0.75rem;
-  line-height: 1.4;
-  color: var(--text-muted);
-}
-
-@media (min-width: 640px) {
-  .tip-text {
-    margin-left: auto;
-  }
-}
-
-/* Grid of NumberField inputs */
-.param-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 12px;
-}
-
-@media (min-width: 640px) {
-  .param-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-gap: 16px;
-  }
-}
-
-@media (min-width: 1280px) {
-  .param-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-/* Chart area */
-.chart-wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
-  row-gap: 24px;
-  column-gap: 24px;
-  overflow: hidden;
-}
-
-@media (min-width: 640px) {
-  .chart-wrapper {
-    row-gap: 32px;
-    column-gap: 32px;
-  }
-}
-
-.chart-section {
-  background-color: transparent;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-  overflow: hidden;
-
-}
-
-.formula-text {
-  margin-top: 8px;
-  font-size: 0.75rem;
-  line-height: 1.4;
-  color: var(--text-muted);
-  word-break: break-word;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-
-:root {
-  /* deep blueprint paper */
-  --bg: #2558a0;
-
-  /* grid colors */
-  --grid-major: rgba(84, 144, 170, 0.5);
-  --grid-minor: rgba(140, 220, 255, 0.15);
-
-  /* spacing for the grid */
-  --grid-size: 16px;
-  --major-step: 4;
-  --major-thickness: 1px;
-}
-
-/* Reset body and also paint the blueprint background directly on body */
 body {
-  margin: 0;
-  color: #fff;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: var(--bg);
-
-  background-image:
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(0,0,0,0) 0%,
-      rgba(0,0,0,0) 60%,
-      rgba(0,0,0,0.35) 99%
-    ),
-    repeating-linear-gradient(
-      0deg,
-      transparent 0,
-      transparent calc(calc(var(--grid-size) * var(--major-step)) - var(--major-thickness)),
-      var(--grid-major) calc(calc(var(--grid-size) * var(--major-step)) - var(--major-thickness)),
-      var(--grid-major) calc(calc(var(--grid-size) * var(--major-step)))
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0,
-      transparent calc(calc(var(--grid-size) * var(--major-step)) - var(--major-thickness)),
-      var(--grid-major) calc(calc(var(--grid-size) * var(--major-step)) - var(--major-thickness)),
-      var(--grid-major) calc(calc(var(--grid-size) * var(--major-step)))
-    ),
-    repeating-linear-gradient(
-      0deg,
-      transparent 0,
-      transparent calc(var(--grid-size) - 1px),
-      var(--grid-minor) calc(var(--grid-size) - 1px),
-      var(--grid-minor) var(--grid-size)
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0,
-      transparent calc(var(--grid-size) - 1px),
-      var(--grid-minor) calc(var(--grid-size) - 1px),
-      var(--grid-minor) var(--grid-size)
-    );
-
-  background-repeat: no-repeat, repeat, repeat, repeat, repeat;
-  background-size:
-    100% 100%,
-    auto,
-    auto,
-    auto,
-    auto;
-  background-position:
-    0 0,
-    0 0,
-    0 0,
-    0 0,
-    0 0;
-
-  /* this is the key part that makes it feel fixed like a HUD without using a fixed div */
-  background-attachment:
-    fixed,
-    fixed,
-    fixed,
-    fixed,
-    fixed;
+    margin: 0;
+    color: #fff;
+    background-color: var(--bg-blueprint);
+    background-image:
+        radial-gradient(circle at 50% 50%,
+            rgb(0 0 0 / 0%) 0%,
+            rgb(0 0 0 / 0%) 60%,
+            rgb(0 0 0 / 65%) 99%),
+        repeating-linear-gradient(0deg,
+            transparent 0,
+            transparent calc(calc(var(--grid-size) * var(--major-step)) - var(--major-thickness)),
+            var(--grid-major) calc(calc(var(--grid-size) * var(--major-step)) - var(--major-thickness)),
+            var(--grid-major) calc(calc(var(--grid-size) * var(--major-step)))),
+        repeating-linear-gradient(90deg,
+            transparent 0,
+            transparent calc(calc(var(--grid-size) * var(--major-step)) - var(--major-thickness)),
+            var(--grid-major) calc(calc(var(--grid-size) * var(--major-step)) - var(--major-thickness)),
+            var(--grid-major) calc(calc(var(--grid-size) * var(--major-step)))),
+        repeating-linear-gradient(0deg,
+            transparent 0,
+            transparent calc(var(--grid-size) - 1px),
+            var(--grid-minor) calc(var(--grid-size) - 1px),
+            var(--grid-minor) var(--grid-size)),
+        repeating-linear-gradient(90deg,
+            transparent 0,
+            transparent calc(var(--grid-size) - 1px),
+            var(--grid-minor) calc(var(--grid-size) - 1px),
+            var(--grid-minor) var(--grid-size));
+    background-repeat: no-repeat, repeat, repeat, repeat, repeat;
+    background-size: 100% 100%, auto, auto, auto, auto;
+    background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+    background-attachment: fixed, fixed, fixed, fixed, fixed;
+    font-family: "Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-/* Your content wrapper stays normal */
-.app-container {
-  position: relative;
-  z-index: 1;
-
-  /* all your layout styles from before */
-  min-height: 100vh;
-
-  /* up to you: panel mode or transparent mode */
-  background-color: rgba(15, 23, 42, 0.85); /* dark slate panel */
-  box-shadow: 0 30px 120px rgba(0,0,0,0.8);
-  border-radius: 1rem;
-
-  max-width: 56rem;
-  margin-left: auto;
-  margin-right: auto;
-
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  row-gap: 32px;
-}
-
-@media (min-width: 480px) {
-  .app-container {
-    padding: 32px;
-    width: 80%;
-  }
-}
-
+/* =========================================
+   App container panel
+   ========================================= */
 
 .app-container {
-  position: relative;
-  z-index: 1;
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 64rem;
+    overflow-x: hidden;
+    min-height: 100vh;
+    background-color: rgb(0 0 0 / 50%);
 
-  /* critical fixes */
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 56rem;
-  overflow-x: hidden;
-
-  /* layout / visuals */
-  min-height: 100vh;
-  background-color: rgba(15, 23, 42, 0.85); /* dark slate panel */
-  box-shadow: 0 30px 120px rgba(0,0,0,0.8);
-  border-radius: 1rem;
-
-  margin-left: auto;
-  margin-right: auto;
-
-  padding: 24px;
-
-  display: flex;
-  flex-direction: column;
-  row-gap: 32px;
+    /* dark slate panel */
+    backdrop-filter: blur(1px);
+    box-shadow: 0 30px 120px rgb(0 0 0 / 80%);
+    border-radius: var(--radius-lg);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--block-gap);
 }
 
-@media (min-width: 480px) {
-  .app-container {
-    /* still border-box so padding stays inside this width */
-    width: 80%;
-    padding: 32px;
-  }
+@media (width >=480px) {
+    .app-container {
+        width: 80%;
+        padding: 1rem;
+    }
 }
 
-.chart-section {
-  background-color: transparent;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-  overflow: hidden;
-}
-
-.chart-section {
-  box-sizing: border-box;
-  width: 100%;
-  overflow-x: hidden;
-  overflow: hidden;
-
-}
-
-@media (max-width: 639px) {
+@media (width <=639px) {
     .app-container {
         padding: 20px 10px;
         margin: 2rem 0;
+        row-gap: var(--block-gap);
+
+        /* tighten a bit on very small screens */
     }
+}
+
+/* =========================================
+   Header
+   ========================================= */
+
+.app-header {
+    margin-bottom: 8px;
+}
+
+@media (width >=640px) {
+    .app-header {
+        margin-bottom: 12px;
+    }
+}
+
+@media (width <640px) {
+    .app-header {
+        text-align: center;
+    }
+}
+
+.app-title {
+    font-size: 1.5rem;
+
+    /* ~text-2xl */
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    margin: 0;
+}
+
+@media (width >=640px) {
+    .app-title {
+        font-size: 1.875rem;
+
+        /* ~text-3xl */
+    }
+}
+
+.app-subtitle {
+    font-size: 0.75rem;
+
+    /* text-xs */
+    color: var(--text-muted);
+    margin-top: 4px;
+    line-height: 1.4;
+}
+
+@media (width >=640px) {
+    .app-subtitle {
+        font-size: 0.875rem;
+
+        /* text-sm */
+    }
+}
+
+.ext-link {
+    text-decoration: underline;
+    color: inherit;
+    transition: color 0.15s ease-in-out;
+}
+
+.ext-link:hover {
+    color: var(--accent-bg-hover);
+
+    /* indigo-400-ish */
+}
+
+/* =========================================
+   Generic section card
+   ========================================= */
+
+.section-box {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+}
+
+@media (width >=640px) {
+    .section-box {
+        padding: 24px;
+    }
+}
+
+.section-heading {
+    font-size: 1rem;
+
+    /* text-base */
+    font-weight: 600;
+    margin: 0 0 12px;
+    line-height: 1.4;
+}
+
+@media (width >=640px) {
+    .section-heading {
+        font-size: 1.125rem;
+
+        /* text-lg */
+    }
+}
+
+/* Rich text in card */
+.section-content {
+    color: var(--text-primary);
+    max-width: none;
+    font-size: 0.875rem;
+
+    /* prose-sm baseline */
+    line-height: 1.6;
+}
+
+@media (width >=640px) {
+    .section-content {
+        font-size: 1rem;
+    }
+}
+
+.section-content p {
+    margin-top: 0;
+    margin-bottom: 1em;
+    color: var(--text-primary);
+}
+
+.section-content code {
+    background-color: rgb(148 163 184 / 15%);
+    color: var(--text-primary);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.section-content strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.section-content em {
+    font-style: italic;
+}
+
+.section-content ul {
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+}
+
+.section-content li {
+    margin: 0.25em;
+    color: var(--text-primary);
+}
+
+/* =========================================
+   Controls row (Choose parameters header block)
+   ========================================= */
+
+/* wrapper with glass */
+.controls-shell {
+    background-color: rgb(0 0 0 / 39%);
+    border: 1px solid rgb(148 163 184 / 12%);
+    border-radius: 1rem;
+    padding: 12px 16px 16px;
+    box-shadow: 0 18px 60px rgb(0 0 0 / 60%);
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+    transition: box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+/* two-line layout: inputs + meta on first row, tip text under */
+.controls-main {
+    display: flex;
+    flex-direction: row;
+    row-gap: 12px;
+}
+
+@media (width < 640px) {
+    .controls-main {
+        flex-direction: column;
+    }
+
+}
+
+@media (width >=640px) {
+    .controls-main {
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+    }
+
+
+}
+
+.controls-left {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+}
+
+@media (width >=640px) {
+    .controls-left {
+        flex-flow: row wrap;
+        align-items: center;
+        gap: 12px;
+    }
+}
+
+.controls-label {
+    font-size: 1rem;
+    color: var(--text-soft);
+}
+
+/* group for select + reset button */
+.controls-group {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* right side meta block */
+.controls-meta {
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--text-subtle);
+}
+
+@media (width >=640px) {
+    .controls-meta {
+        margin-left: auto;
+    }
+}
+
+/* Latest text */
+.latest-span {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--text-subtle);
+}
+
+.latest-date {
+    color: var(--text-soft);
+    font-weight: 500;
+}
+
+
+.tip-text {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--text-muted);
+    font-style: italic;
+    max-width: 50vw;
+}
+
+@media (width >=640px) {
+    .tip-text {
+        margin-left: 0;
+    }
+}
+
+/* =========================================
+   Inputs and buttons
+   ========================================= */
+
+.fancy-input-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+/* base select */
+.select-input {
+    background-color: var(--input-bg);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--input-border);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    outline: 0;
+    position: relative;
+    z-index: 2;
+    min-height: 2.25rem;
+    cursor: pointer;
+}
+
+.select-input:focus {
+    border-color: var(--accent-bg);
+    transform: translateY(-1px) scale(1.01);
+}
+
+
+/* button */
+.reset-button {
+    position: relative;
+    background-color: var(--accent-bg);
+    border-radius: 1rem;
+    border: none;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: bold;
+    line-height: 1;
+    min-height: 2rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    justify-content: center;
+    margin: .5rem;
+}
+
+.reset-button:hover {
+    background-color: var(--accent-bg-hover);
+
+}
+
+
+
+/* pill inside the button to show date */
+.latest-pill {
+    background-color: rgb(0 0 0 / 30%);
+    color: #fff;
+    font-size: 0.7rem;
+    line-height: 1.2;
+    font-weight: 500;
+    padding: 0.25rem 0.4rem;
+    border-radius: 0.4rem;
+    border: 1px solid rgb(255 255 255 / 20%);
+    white-space: nowrap;
+}
+
+
+
+/* =========================================
+   Chart panels
+   ========================================= */
+
+.chart-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    overflow: hidden;
+}
+
+@media (width >=640px) {
+    .chart-wrapper {
+        gap: 32px;
+    }
+}
+
+.chart-section {
+    box-sizing: border-box;
+    width: 100%;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    overflow: hidden;
+}
+
+/* wrapper that stacks label + dropdown button */
+.ui-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* label text */
+.ui-label {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #cbd5e1;
+    /* slate-300 */
+    letter-spacing: -0.03em;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, Inter, sans-serif;
+}
+
+/* outer div that positions button + menu, and is the ref for outside-click */
+.ui-select-shell {
+    position: relative;
+    display: inline-block;
+    min-width: 12rem;
+}
+
+/* clickable button that shows active selection */
+.ui-select-button {
+    position: relative;
+    appearance: none;
+    background-color: rgb(15 23 42 / 70%);
+    /* slate-900/70 */
+    color: #f8fafc;
+    border-radius: 0.6rem;
+    border: 1px solid rgb(148 163 184 / 28%);
+    min-height: 2.4rem;
+    padding: 0.6rem 2rem 0.6rem 0.6rem;
+    width: 100%;
+    text-align: left;
+    line-height: 1.3;
+    font-size: 0.8rem;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition:
+        border-color 0.12s ease,
+        box-shadow 0.12s ease,
+        background-color 0.12s ease;
+}
+
+.ui-select-button:hover {
+    background-color: rgb(15 23 42 / 90%);
+    border-color: rgb(226 232 240 / 40%);
+    /* slate-100/40 */
+}
+
+.ui-select-button:focus {
+    outline: none;
+    border-color: var(--accent-bg);
+    background-color: rgb(15 23 42 / 100%);
+}
+
+/* optional extra state hook if you want to style when open */
+.ui-select-button--open {
+    border-color: var(--accent-bg);
+}
+
+/* text block inside the button: main label + hint stacked */
+.ui-select-button-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    pointer-events: none;
+}
+
+.ui-select-main {
+    color: #f8fafc;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.ui-select-hint {
+    color: #94a3b8;
+    /* slate-400 */
+    font-size: 0.7rem;
+    line-height: 1.2;
+}
+
+/* caret arrow */
+.ui-caret {
+    position: absolute;
+    right: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    font-size: 0.8rem;
+    line-height: 1;
+    color: #94a3b8;
+    transition: transform 0.12s ease;
+    pointer-events: none;
+}
+
+.ui-caret--rot {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* dropdown menu */
+.ui-select-menu {
+    position: absolute;
+    z-index: 40;
+    top: calc(100% + 0.4rem);
+    left: 0;
+    min-width: 100%;
+    background-color: rgba(0, 0, 0, 0.603);
+    border: 1px solid rgb(148 163 184 / 28%);
+    border-radius: 0.6rem;
+    padding: 0.4rem 0;
+    max-height: 16rem;
+    overflow-y: auto;
+    box-shadow:
+        0 24px 48px rgb(0 0 0 / 80%),
+        0 0 24px rgba(29, 29, 29, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px) scale(0.98);
+    transition: opacity 0.12s ease,
+        transform 0.12s ease;
+    backdrop-filter: blur(8px);
+
+}
+
+.ui-select-menu--open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+/* each option row */
+.ui-select-option {
+    cursor: pointer;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.8rem;
+    line-height: 1.3;
+    color: #f8fafc;
+    display: flex;
+    align-items: flex-start;
+    margin: .25rem;
+}
+
+.ui-select-option.is-active,
+.ui-select-option:hover {
+    background-color: rgba(39, 128, 211, 0.589);
+    border-radius: .5rem;
+}
+
+/* layout for label + hint inside an option */
+.ui-option-line {
+    display: flex;
+    flex-direction: column;
+}
+
+.ui-option-label {
+    font-weight: 500;
+    color: #f8fafc;
+}
+
+.ui-option-hint {
+    font-size: 0.7rem;
+    line-height: 1.2;
+    color: #94a3b8;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.tau-custom-wrapper[data-open="false"] {
+    pointer-events: none;
+}
+
+/* card container */
+.tau-card {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    border: 1px solid rgb(148 163 184 / 18%);
+
+    /* slate-400-ish w/ alpha */
+    border-radius: 1rem;
+    padding: 1rem 1rem 0.75rem;
+    background-color: rgb(0 0 0 / 19.9%);
+
+    /* slate-900/60 */
+    max-width: 28rem;
+    color: #f8fafc;
+    width: auto;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, Inter, sans-serif;
+}
+
+/* row for the two numeric inputs */
+.tau-row {
+    display: flex;
+    gap: 0.75rem 1rem;
+    justify-content: space-around;
+}
+
+/* field wrapper */
+.tau-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+}
+
+/* label text */
+.tau-field-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #cbd5e1;
+
+    /* slate-300 */
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    letter-spacing: -0.03em;
+}
+
+/* numeric input */
+.tau-input {
+    appearance: none;
+    background-color: rgb(15 23 42 / 70%);
+
+    /* slate-900/70 */
+    color: #f8fafc;
+    font-size: 0.8rem;
+    line-height: 1.3;
+    border-radius: 0.6rem;
+    border: 1px solid rgb(148 163 184 / 28%);
+
+    /* slate-400-ish */
+    min-height: 2.4rem;
+    padding: 0 0.6rem;
+    font-variant-numeric: tabular-nums;
+    transition:
+        border-color 0.12s ease,
+        box-shadow 0.12s ease,
+        background-color 0.12s ease;
+}
+
+.tau-input::placeholder {
+    color: #64748b;
+
+    /* slate-500 */
+    opacity: 1;
+}
+
+.tau-input:hover {
+    background-color: rgb(15 23 42 / 90%);
+    border-color: rgb(226 232 240 / 40%);
+
+    /* slate-100/40 */
+}
+
+.tau-input:focus {
+    outline: none;
+    border-color: var(--accent-bg-hover);
+    background-color: rgb(15 23 42 / 100%);
+}
+
+/* hint text across full width */
+.tau-hint {
+    grid-column: 1 / -1;
+    margin-top: 0.75rem;
+    font-size: 0.7rem;
+    line-height: 1.4;
+    color: #94a3b8;
+
+    /* slate-400 */
+    max-width: 40ch;
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================
+   Animated preset dropdown
+   ========================================= */
+
+
+
+.tau-select-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.25rem;
+    padding: 0.5rem 0.75rem;
+    background-color: rgb(15 23 42 / 34.2%);
+    border: 1px solid var(--input-border);
+    border-radius: 1rem;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.2;
+    cursor: pointer;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
+    z-index: 2;
+}
+
+.tau-select-button:hover,
+.tau-select-button:focus {
+    outline: 0;
+    border-color: var(--accent-bg);
+    transform: translateY(-1px) scale(1.005);
+}
+
+/* text container inside button */
+.tau-select-button-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+}
+
+.tau-select-main {
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.8rem;
+    line-height: 1.2;
+}
+
+.tau-select-hint {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    line-height: 1.2;
+}
+
+/* caret */
+.tau-caret {
+    font-size: 0.8rem;
+    line-height: 1;
+    color: var(--text-soft);
+    transition: transform 0.15s ease;
+}
+
+.tau-caret--rot {
+    transform: rotate(180deg);
+}
+
+/* dropdown menu layer */
+.tau-select-menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 6px);
+    background-color: rgb(2 2 2 / 95%);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    box-shadow:
+        0 40px 120px rgb(0 0 0 / 90%),
+        0 0 40px rgb(47 196 188 / 35%);
+    padding: 6px 0;
+    max-height: 260px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    opacity: 0;
+    pointer-events: none;
+    transform-origin: top center;
+    transform: scale(0.96) translateY(-4px);
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+    z-index: 10;
+}
+
+/* visible state */
+.tau-select-menu--open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1) translateY(0);
+}
+
+/* each option row */
+.tau-select-option {
+    padding: 8px 0;
+    font-size: 0.8rem;
+    line-height: 1.3;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    transition: background-color 0.12s ease,
+        color 0.12s ease;
+}
+
+.tau-option-line {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.tau-option-label {
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.tau-option-hint {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    line-height: 1.2;
+}
+
+/* hover and active styles */
+.tau-select-option:hover {
+    background-color: rgb(47 196 188 / 8%);
+    color: var(--text-primary);
+}
+
+.tau-select-option.is-active {
+    background-color: rgb(47 196 188 / 12%);
+    color: var(--text-primary);
+}
+
+/* =========================================
+   Animated custom controls reveal
+   ========================================= */
+
+/* wrapper that animates height/opacity so parent resizes smoothly */
+.tau-custom-wrapper {
+    --transition-dur: 0.22s;
+
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-4px) scale(0.99);
+    transition:
+        max-height var(--transition-dur) ease,
+        opacity var(--transition-dur) ease,
+        transform var(--transition-dur) ease;
+}
+
+/* open state */
+.tau-custom-wrapper[data-open="true"] {
+    max-height: 400px;
+
+    /* large enough to fit grid */
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* inside grid gets a subtle raise/pulse when it appears */
+.tau-custom-wrapper[data-open="true"] .tau-custom-grid {
+    animation: customPanelPop 0.25s ease;
+}
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .tau-custom-wrapper,
+    .tau-custom-wrapper[data-open="true"],
+    .tau-select-menu,
+    .tau-select-menu--open,
+    .tau-select-button,
+    .tau-caret,
+    .tau-custom-wrapper[data-open="true"] .tau-custom-grid {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
+}
+
+/* wrapper holds button and absolute menu */
+.tau-select-shell {
+    position: relative;
+    display: inline-block;
+    font-size: 0.875rem;
+    line-height: 1.3;
+    color: var(--text-primary);
+    isolation: isolate;
+
+    /* or just remove this line if you already had it */
+}
+
+
+/* Container that holds the 6 fields in one centered row */
+.fieldsRow {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: nowrap;
+    /* single row */
+}
+
+
+
+/* Label text */
+.numberField__label {
+    font-size: 12px;
+    color: #c7c7c7;
+}
+
+/* Numeric input */
+.number-field__number {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #445;
+    border-radius: 1rem;
+    background: #0f1220;
+    color: #eaeaea;
+    outline: none;
+    text-align: center;
+}
+
+.number-field__number:focus {
+    border-color: var(--accent-bg-hover);
+    box-shadow: 0 0 0 2px rgb(102 119 255 / 25%);
+}
+
+/* Vertical slider */
+
+/* Base vertical range */
+.number-field__range-vertical {
+  touch-action: none;             /* tell the browser: no panning/zooming here */   
+  height: var(--slider-length);
+  width: var(--slider-thickness);
+  writing-mode: vertical-lr;
+  direction: rtl;
+
+  /* Reset native styling for consistent theming */
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent; /* we style the track pseudo-elements */
+  padding: 0; /* avoid unexpected extra space */
+  margin: 0;
+}
+
+
+/* WebKit track and thumb */
+.number-field__range-vertical::-webkit-slider-runnable-track {
+  background: var(--track-bg);
+  border-radius: 999px;
+  width: var(--slider-thickness);
+  height: 100%;
+}
+
+.number-field__range-vertical::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  border-radius: 50%;
+  background: var(--thumb-bg);
+  border: none;
+
+  /* Center the thumb over the track without hacky negative margins */
+  transform: translateX(calc((var(--slider-thickness) - var(--thumb-size)) / 2));
+}
+
+/* Firefox track and thumb */
+.number-field__range-vertical::-moz-range-track {
+  background: var(--track-bg);
+  border-radius: 999px;
+  width: var(--slider-thickness);
+  height: 100%;
+}
+
+.number-field__range-vertical::-moz-range-thumb {
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  border-radius: 50%;
+  background: var(--thumb-bg);
+  border: none;
+}
+
+/* Optional focus style */
+.number-field__range-vertical:focus-visible {
+  outline: 2px solid #8ea0ff55;
+  outline-offset: 2px;
+}
+
+/* Last-ditch fallback: rotate if writing-mode is not supported */
+@supports not (writing-mode: vertical-lr) {
+  .number-field__range-vertical {
+    transform: rotate(-90deg);
+    height: var(--slider-thickness);
+    width: var(--slider-length);
+
+    /* When rotating, the visual direction flips.
+       Keep direction: rtl so min is at bottom after rotation. */
+  }
+}
+
+.param-grid {
+    width: 100%;
+    border-radius: 1rem;
+    background-color: rgba(0, 0, 0, 0.342);
+    padding: 1rem 0;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+/* Each field is a vertical stack: name, value, slider */
+.numberField {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    /* centered alignment inside the column */
+    width: 160px;
+
+    /* pick a fixed width so 6 fit in one row on desktop */
+    text-align: center;
+    max-width: 5rem;
+
+    /* fixed width for each field */
+    margin: 0 auto;
+    min-width: 1rem;
+    gap: 8px;
+}
+
+@media (max-width: 560px) {
+    .numberField {
+        max-width: 3rem;
+    }
+}
+
+/* Chrome, Safari, Edge, etc. */
+.number-field__number::-webkit-outer-spin-button,
+.number-field__number::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.number-field__number[type="number"] {
+    appearance: textfield;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    padding: 4px;
+    font-size: .9rem;
+}
+
+
+.reset-label {
+    font-weight: 700;
 }

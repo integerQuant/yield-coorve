@@ -1,71 +1,170 @@
 import React from "react";
+import UiDropdown, { UiDropdownOption } from "./UiDropdown";
 
-export type TauPresetKey = "classic" | "br" | "smooth";
+export type TauPresetKey =
+  | "classic"
+  | "br"
+  | "smoothFixed"
+  | "smoothCustom";
 
+// Brazil style discrete tenor set
 export function brazilishTenors() {
   return [0.25, 0.5, 1, 2, 3, 4, 5, 10];
 }
 
+// Classic US style tenors
 export function classicTenors() {
-  // A compact set spanning short to long (tweak as you like)
   return [0.08, 0.25, 0.5, 1, 2, 3, 5, 7, 10, 15, 20, 30];
 }
 
-export function smoothTenors(maxYears = 10, pointsPerYear = 52) {
+// Dense smooth grid from near-0 to maxYears
+export function smoothTenors(maxYears = 10, pointsPerYear = 252) {
   const step = 1 / pointsPerYear;
   const t: number[] = [];
-  // start near 0 but not 0 to avoid visual kinks; compute handles 0 safely anyway
-  for (let x = step; x <= maxYears + 1e-12; x += step) t.push(+x.toFixed(6));
+  for (let x = step; x <= maxYears + 1e-12; x += step) {
+    t.push(+x.toFixed(6));
+  }
   return t;
 }
 
-export function getPreset(key: TauPresetKey): number[] {
+// Helper to get tenors for each preset
+export function getPresetTenors(
+  key: TauPresetKey,
+  customYears: number,
+  customPointsPerYear: number
+): number[] {
   if (key === "classic") return classicTenors();
   if (key === "br") return brazilishTenors();
-  return smoothTenors(10, 50);
+  if (key === "smoothFixed") return smoothTenors(10, 252);
+  // smoothCustom
+  return smoothTenors(customYears, customPointsPerYear);
+}
+
+const PRESET_OPTIONS: UiDropdownOption<TauPresetKey>[] = [
+  {
+    value: "smoothFixed",
+    label: "Smooth fixed",
+    hint: "252 pts/yr, 10y"
+  },
+  {
+    value: "classic",
+    label: "Classic",
+    hint: "1m…30y"
+  },
+  {
+    value: "br",
+    label: "Brazil-ish",
+    hint: "3m…10y"
+  },
+  {
+    value: "smoothCustom",
+    label: "Custom",
+    hint: "Custom density"
+  }
+];
+
+// clamp helpers
+function clampInt(n: number, min: number, max: number) {
+  if (Number.isNaN(n)) return min;
+  if (n < min) return min;
+  if (n > max) return max;
+  return Math.round(n);
+}
+
+function clampFloat(n: number, min: number, max: number, step = 0.25) {
+  if (Number.isNaN(n)) return min;
+  if (n < min) n = min;
+  if (n > max) n = max;
+  const snapped = Math.round(n / step) * step;
+  return +snapped.toFixed(6);
 }
 
 export default function TauPresets({
   preset,
   setPreset,
-  input,
-  setInput,
-  onApplyPreset
+  customYears,
+  setCustomYears,
+  customPointsPerYear,
+  setCustomPointsPerYear
 }: {
   preset: TauPresetKey;
   setPreset: (k: TauPresetKey) => void;
-  input: string;
-  setInput: (s: string) => void;
-  onApplyPreset: () => void;
+  customYears: number;
+  setCustomYears: (n: number) => void;
+  customPointsPerYear: number;
+  setCustomPointsPerYear: (n: number) => void;
 }) {
-  return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap items-center gap-2">
-        <label className="text-sm text-slate-300">τ Preset:</label>
-        <select
-          className="rounded bg-slate-900 px-3 py-2 ring-1 ring-slate-700 focus:ring-indigo-500 outline-none"
-          value={preset}
-          onChange={(e) => setPreset(e.target.value as TauPresetKey)}
-        >
-          <option value="smooth">Smooth (52 pts/year, 10y)</option>
-          <option value="classic">Classic (0.25…30y)</option>
-          <option value="br">Brazil-ish (0.08…10y)</option>
-        </select>
-        <button
-          className="rounded bg-indigo-600 px-3 py-2 text-sm hover:bg-indigo-500"
-          onClick={onApplyPreset}
-          title="Replace the custom list with the preset values"
-        >
-          Apply preset
-        </button>
-      </div>
+  function handlePointsPerYearChange(raw: string) {
+    const n = clampInt(+raw, 1, 500); // min 1, max 500
+    setCustomPointsPerYear(n);
+  }
 
-      <div className="text-sm text-slate-300">Custom τ (years, comma-separated)</div>
-      <textarea
-        className="w-full h-24 rounded bg-slate-900 px-3 py-2 outline-none ring-1 ring-slate-700 focus:ring-indigo-500 font-mono text-xs"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
+  function handleYearsChange(raw: string) {
+    const n = clampFloat(+raw, 0.25, 99, 0.25); // min 0.25, max 99
+    setCustomYears(n);
+  }
+
+  const showCustomControls = preset === "smoothCustom";
+
+  return (
+    <div className="tau-presets">
+      {/* Row 1: preset dropdown */}
+      <UiDropdown<TauPresetKey>
+        labelId="tauPresetLabel"
+        labelText="τ Preset:"
+        activeValue={preset}
+        options={PRESET_OPTIONS}
+        onSelect={(val) => {
+          setPreset(val);
+        }}
       />
+
+      {/* Row 2: smoothCustom settings */}
+      <div
+        className="tau-custom-wrapper"
+        data-open={showCustomControls ? "true" : "false"}
+        aria-hidden={showCustomControls ? "false" : "true"}
+      >
+        <div className="tau-card">
+          <div className="tau-row">
+            <div className="tau-field">
+              <label className="tau-field-label" htmlFor="pointsPerYearInput">
+                pts/yr
+              </label>
+              <input
+                id="pointsPerYearInput"
+                type="number"
+                min={1}
+                max={500}
+                step={1}
+                className="tau-input"
+                value={customPointsPerYear}
+                onChange={(e) => handlePointsPerYearChange(e.target.value)}
+              />
+            </div>
+
+            <div className="tau-field">
+              <label className="tau-field-label" htmlFor="yearsInput">
+                years
+              </label>
+              <input
+                id="yearsInput"
+                type="number"
+                min={0.25}
+                max={99}
+                step={0.25}
+                className="tau-input"
+                value={customYears}
+                onChange={(e) => handleYearsChange(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="tau-hint">
+            Max 500 pts/yr and 99y.
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

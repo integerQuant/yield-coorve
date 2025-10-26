@@ -66,11 +66,11 @@ export default function ResponsiveFastCurveChart({
     // mobile-ish
     { maxWidth: 800, height: 300 },
     // tablet-ish
-    { maxWidth: 1000, height: 500 },
+    { maxWidth: 1000, height: 400 },
     // big screens will fall through to aspectRatio
   ],
 
-  aspectRatio = 1000 / 500 // ~1.875
+  aspectRatio = 900 / 600 // ~1.875
 }: ResponsiveFastCurveChartProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const bgRef = useRef<HTMLCanvasElement | null>(null);
@@ -93,6 +93,33 @@ export default function ResponsiveFastCurveChart({
     h: 420,
   });
 
+function formatTenor(yearsDecimal: number) {
+  if (!isFinite(yearsDecimal) || yearsDecimal < 0) return "0y 0m";
+
+  const years = Math.floor(yearsDecimal);
+
+  const remainingYears = yearsDecimal - years;
+  const monthsRaw = remainingYears * 12;
+
+  let months = Math.round(monthsRaw);
+
+  let adjYears = years;
+  if (months === 12) {
+    adjYears += 1;
+    months = 0;
+  }
+
+  if (adjYears === 0) {
+    return `${months}m`;
+  }
+  if (months === 0) {
+    return `${adjYears}y`;
+  }
+  return `${adjYears}y ${months}m`;
+}
+
+
+
   // Tooltip state
   const [hoverInfo, setHoverInfo] = useState<{
     px: number;
@@ -113,46 +140,46 @@ export default function ResponsiveFastCurveChart({
   });
 
   // observe container width and pick dimensions
-useEffect(() => {
-  const el = containerRef.current;
-  if (!el) return;
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
 
-  const chooseHeight = (widthPx: number) => {
-    for (const rule of heightRulesRef.current) {
-      if (widthPx <= rule.maxWidth) {
-        return rule.height;
+    const chooseHeight = (widthPx: number) => {
+      for (const rule of heightRulesRef.current) {
+        if (widthPx <= rule.maxWidth) {
+          return rule.height;
+        }
       }
-    }
-    const ar = aspectRatioRef.current;
-    return Math.max(160, Math.round(widthPx / ar));
-  };
+      const ar = aspectRatioRef.current;
+      return Math.max(160, Math.round(widthPx / ar));
+    };
 
-  // initial measure
-  const rect = el.getBoundingClientRect();
-  const startW = rect.width;
-  const startH = chooseHeight(startW);
-  setDims({ w: startW, h: startH });
+    // initial measure
+    const rect = el.getBoundingClientRect();
+    const startW = rect.width;
+    const startH = chooseHeight(startW);
+    setDims({ w: startW, h: startH });
 
-  // observer
-  const obs = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      const newW = entry.contentRect.width;
-      const newH = chooseHeight(newW);
+    // observer
+    const obs = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const newW = entry.contentRect.width;
+        const newH = chooseHeight(newW);
 
-      // avoid useless setState spam
-      setDims((prev) =>
-        prev.w === newW && prev.h === newH
-          ? prev
-          : { w: newW, h: newH }
-      );
-    }
-  });
+        // avoid useless setState spam
+        setDims((prev) =>
+          prev.w === newW && prev.h === newH
+            ? prev
+            : { w: newW, h: newH }
+        );
+      }
+    });
 
-  obs.observe(el);
-  return () => {
-    obs.disconnect();
-  };
-}, []); // run once on mount
+    obs.observe(el);
+    return () => {
+      obs.disconnect();
+    };
+  }, []); // run once on mount
 
 
   // palette / series prep
@@ -229,10 +256,43 @@ useEffect(() => {
     return ticks;
   }
 
+  function customXTicks(xMin: number, xMax: number) {
+    const base = [ 0.5, 1, 2, 5, 10, 15, 20, 25, 30];
+    const ticks: number[] = [...base];
+
+    if (xMax > 30) {
+      let t = 40;
+      while (t <= xMax + 1e-9) {
+        ticks.push(t);
+        t += 10;
+      }
+    }
+
+    const filtered = ticks.filter((t) => t >= xMin && t <= xMax);
+    const uniqSorted = Array.from(new Set(filtered)).sort((a, b) => a - b);
+
+    return uniqSorted;
+  }
+
+  // const xTicks = useMemo(
+  //   () => niceTicks(xMin, xMax, 5),
+  //   [xMin, xMax]
+  // );
+
   const xTicks = useMemo(
-    () => niceTicks(xMin, xMax, 5),
+    () => customXTicks(xMin, xMax),
     [xMin, xMax]
   );
+
+  function defaultXTickFormat(tau: number) {
+    if (tau < 1) {
+      const months = Math.round(tau * 12);
+      return `${months}m`;
+    }
+    return `${tau}y`;
+  }
+
+
   const yTicks = useMemo(
     () => niceTicks(yMin, yMax, 5),
     [yMin, yMax]
@@ -281,56 +341,64 @@ useEffect(() => {
     ctx.fillStyle = fontColor;
     ctx.strokeStyle = gridColor;
 
-    // horizontal grid and y tick labels
-    yTicks.forEach((yv) => {
-      const py = scale.yScale(yv);
+// horizontal grid and y tick labels
+yTicks.forEach((yv) => {
+  const py = scale.yScale(yv);
 
-      ctx.strokeStyle = gridColor;
-      ctx.beginPath();
-      ctx.moveTo(padding.left, py);
-      ctx.lineTo(width - padding.right, py);
-      ctx.stroke();
+  // dashed grid
+  ctx.strokeStyle = gridColor;
+  ctx.setLineDash([4, 4]);      // <- make dashed
+  ctx.beginPath();
+  ctx.moveTo(padding.left, py);
+  ctx.lineTo(width - padding.right, py);
+  ctx.stroke();
 
-      ctx.fillStyle = fontColor;
-      ctx.textAlign = "right";
-      ctx.fillText(yTickFormat(yv), padding.left - 6, py);
-    });
+  // tick label
+  ctx.fillStyle = fontColor;
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+  ctx.fillText(yTickFormat(yv), padding.left - 6, py);
+});
 
-    // vertical grid and x tick labels
-    xTicks.forEach((xv) => {
-      const px = scale.xScale(xv);
+// vertical grid and x tick labels
+xTicks.forEach((xv) => {
+  const px = scale.xScale(xv);
 
-      ctx.strokeStyle = gridColor;
-      ctx.beginPath();
-      ctx.moveTo(px, padding.top);
-      ctx.lineTo(px, height - padding.bottom);
-      ctx.stroke();
+  // dashed grid
+  ctx.strokeStyle = gridColor;
+  ctx.setLineDash([4, 4]);      // <- make dashed
+  ctx.beginPath();
+  ctx.moveTo(px, padding.top);
+  ctx.lineTo(px, height - padding.bottom);
+  ctx.stroke();
 
-      ctx.fillStyle = fontColor;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "top";
-      ctx.fillText(
-        xTickFormat(xv),
-        px,
-        height - padding.bottom + 4
-      );
-    });
+  // tick label
+  ctx.fillStyle = fontColor;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.fillText(
+    defaultXTickFormat(xv),
+    px,
+    height - padding.bottom + 4
+  );
+});
 
-    // axes
-    ctx.strokeStyle = axisColor;
-    ctx.lineWidth = 1.5;
+// axes
+ctx.strokeStyle = axisColor;
+ctx.lineWidth = 1.5;
+ctx.setLineDash([]);            // <- reset to solid before drawing axes
 
-    // x axis
-    ctx.beginPath();
-    ctx.moveTo(padding.left, height - padding.bottom);
-    ctx.lineTo(width - padding.right, height - padding.bottom);
-    ctx.stroke();
+// x axis
+ctx.beginPath();
+ctx.moveTo(padding.left, height - padding.bottom);
+ctx.lineTo(width - padding.right, height - padding.bottom);
+ctx.stroke();
 
-    // y axis
-    ctx.beginPath();
-    ctx.moveTo(padding.left, padding.top);
-    ctx.lineTo(padding.left, height - padding.bottom);
-    ctx.stroke();
+// y axis
+ctx.beginPath();
+ctx.moveTo(padding.left, padding.top);
+ctx.lineTo(padding.left, height - padding.bottom);
+ctx.stroke();
 
     // axis labels
     ctx.fillStyle = fontColor;
@@ -343,15 +411,15 @@ useEffect(() => {
       height - 4
     );
 
-const yLabelX = 0
+    const yLabelX = 0
 
-ctx.save();
-ctx.translate(yLabelX, padding.top + scale.plotH / 2);
-ctx.rotate(-Math.PI / 2);
-ctx.textAlign = "center";
-ctx.textBaseline = "top";
-ctx.fillText(yLabel, 0, 0);
-ctx.restore();
+    ctx.save();
+    ctx.translate(yLabelX, padding.top + scale.plotH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillText(yLabel, 0, 0);
+    ctx.restore();
   }, [
     dims,
     bgColor,
@@ -414,38 +482,38 @@ ctx.restore();
       const mx = evt.clientX - rect.left;
       const my = evt.clientY - rect.top;
 
-let best = {
-  dist2: Infinity, // squared distance for speed
-  px: 0,
-  py: 0,
-  xv: 0,
-  yv: 0,
-  name: "",
-  color: "#fff",
-};
-
-for (const s of preparedSeries) {
-  for (let i = 0; i < s.len; i++) {
-    const px = scale.xScale(s.x[i]);
-    const py = scale.yScale(s.y[i]);
-
-    const dx = px - mx;
-    const dy = py - my;
-    const d2 = dx * dx + dy * dy; // no sqrt needed
-
-    if (d2 < best.dist2) {
-      best = {
-        dist2: d2,
-        px,
-        py,
-        xv: s.x[i],
-        yv: s.y[i],
-        name: s.name,
-        color: s.color!,
+      let best = {
+        dist2: Infinity, // squared distance for speed
+        px: 0,
+        py: 0,
+        xv: 0,
+        yv: 0,
+        name: "",
+        color: "#fff",
       };
-    }
-  }
-}
+
+      for (const s of preparedSeries) {
+        for (let i = 0; i < s.len; i++) {
+          const px = scale.xScale(s.x[i]);
+          const py = scale.yScale(s.y[i]);
+
+          const dx = px - mx;
+          const dy = py - my;
+          const d2 = dx * dx + dy * dy; // no sqrt needed
+
+          if (d2 < best.dist2) {
+            best = {
+              dist2: d2,
+              px,
+              py,
+              xv: s.x[i],
+              yv: s.y[i],
+              name: s.name,
+              color: s.color!,
+            };
+          }
+        }
+      }
 
       const { w: width, h: height } = dims;
       const inPlot =
@@ -507,7 +575,7 @@ for (const s of preparedSeries) {
       style={{
         position: "absolute",
         top: padding.top + 4,
-        left: padding.left + 4,
+        right: padding.right + 4,
         display: "flex",
         flexWrap: "wrap",
         gap: "6px 12px",
@@ -631,7 +699,7 @@ for (const s of preparedSeries) {
               >
                 {hoverInfo.name}
               </div>
-              <div>τ = {hoverInfo.xv.toFixed(2)} yr</div>
+              <div>τ = {formatTenor(hoverInfo.xv)}</div>
               <div>
                 y = {(hoverInfo.yv * 100).toFixed(2)}%
               </div>
