@@ -5,6 +5,7 @@ import { latestByType, CurveType } from "../defaultParams";
 import TauPresets, { getPresetTenors, TauPresetKey } from "./TauPresets";
 import CurveTypeSelect from "./CurveTypeSelect";
 import FastCurveChart from "./FastCurveChart";
+import Footer from "./Footer";
 
 import "./App.css";
 
@@ -277,7 +278,9 @@ export default function App() {
             line up with anticipated policy moves or cycle turns.
           </p>
         </Section>
+        <Footer/>
       </div>
+      
     </div>
   );
 }

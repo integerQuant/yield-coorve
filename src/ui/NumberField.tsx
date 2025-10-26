@@ -32,7 +32,7 @@ export default function NumberField({
 
   return (
     <label className="numberField">
-      <span className="numberField__label">{label}</span>
+      <span className="number-field__label">{label}</span>
 
       <input
         className="number-field__number"
