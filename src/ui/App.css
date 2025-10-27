@@ -200,6 +200,7 @@ body {
     /* text-xs */
     color: var(--text-muted);
     margin-top: 4px;
+    margin-bottom: 0;
     line-height: 1.4;
 }
 
