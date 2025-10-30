@@ -40,7 +40,7 @@
     --pulse-color: rgb(148 163 184 / 18%);
 
     /* deep blueprint paper */
-    --bg-blueprint: #2558a0;
+    --bg-blueprint: #3e6cad;
 
     /* grid colors */
     --grid-major: rgb(84 144 170 / 50%);
@@ -85,7 +85,7 @@ body {
         radial-gradient(circle at 50% 50%,
             rgb(0 0 0 / 0%) 0%,
             rgb(0 0 0 / 0%) 60%,
-            rgb(0 0 0 / 65%) 99%),
+            rgb(0 0 0 / 35%) 100%),
         repeating-linear-gradient(0deg,
             transparent 0,
             transparent calc(calc(var(--grid-size) * var(--major-step)) - var(--major-thickness)),
@@ -118,6 +118,8 @@ body {
    ========================================= */
 
 .app-container {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     position: relative;
     z-index: 1;
     box-sizing: border-box;
@@ -190,7 +192,6 @@ body {
     .app-title {
         font-size: 1.875rem;
 
-        /* ~text-3xl */
     }
 }
 
